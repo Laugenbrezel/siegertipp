@@ -17,10 +17,15 @@
         <div th:replace="fragments/alert :: alert (type=${#strings.toLowerCase(message.type)}, message=#{${message.message}(${#authentication.name})})">&nbsp;</div>
     </th:block>
     <p>
-        <h1>Willkommen beim <em>Siegertipp</em>!</h1>
+        <a href="#" class="btn btn-primary" th:href="@{/group/create}">Create new</a>
     </p>
-    <p>
-        <img th:src="@{/resources/images/soccer_ball.svg.png}" />
+    <p th:unless="${#lists.isEmpty(groups)}">
+        <table class="table">
+            <tr th:each="group : ${groups}">
+                <td th:text="${group.id}">1</td>
+                <td th:text="${group.name}">Text ...</td>
+            </tr>
+        </table>
     </p>
 </div>
 </body>

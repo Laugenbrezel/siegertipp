@@ -9,6 +9,11 @@
 <body>
 <div class="container">
     <div th:replace="fragments/alert :: alert (type='danger', message=${errorMessage})">Error: Error</div>
+
+    <p>
+        <img class="img-responsive" th:src="@{/resources/images/not_found.gif}" />
+    </p>
+
     <div th:include="fragments/footer :: footer">&copy; 2013 The Static Templates</div>
 </div>
 </body>
