@@ -1,6 +1,7 @@
 package de.bigzee.siegertipp.group;
 
 import de.bigzee.siegertipp.model.Group;
+import de.bigzee.siegertipp.model.Group;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -16,18 +17,22 @@ public class GroupRepository {
     private EntityManager entityManager;
 
     @Transactional
-    public Group save(Group group) {
-        entityManager.persist(group);
-        return group;
+    public Group save(Group Group) {
+        entityManager.persist(Group);
+        return Group;
     }
 
     @Transactional
-    public Group update(Group group) {
-        entityManager.merge(group);
-        return group;
+    public Group update(Group Group) {
+        entityManager.merge(Group);
+        return Group;
     }
 
     public List<Group> findAll() {
-        return entityManager.createQuery("select g from Group g order by g.name", Group.class).getResultList();
+        return entityManager.createQuery("select p from Group p order by p.name", Group.class).getResultList();
+    }
+
+    public Group findById(Long id) {
+        return entityManager.find(Group.class, id);
     }
 }

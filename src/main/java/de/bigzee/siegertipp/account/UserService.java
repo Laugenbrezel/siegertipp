@@ -30,10 +30,18 @@ public class UserService implements UserDetailsService {
 		}
 		return createUser(account);
 	}
-	
-	public void signin(Account account) {
+
+    public Account findByUsername(String username) throws UsernameNotFoundException {
+        return accountRepository.findByEmail(username);
+    }
+
+    public void signin(Account account) {
 		SecurityContextHolder.getContext().setAuthentication(authenticate(account));
 	}
+
+    public Account current() {
+        return accountRepository.findByEmail(SecurityContextHolder.getContext().getAuthentication().getName());
+    }
 	
 	private Authentication authenticate(Account account) {
 		return new UsernamePasswordAuthenticationToken(createUser(account), null, Collections.singleton(createAuthority(account)));		

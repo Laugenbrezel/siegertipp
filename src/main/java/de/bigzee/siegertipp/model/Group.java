@@ -21,7 +21,7 @@ public class Group implements Serializable {
     @Column(unique = true)
     private String name;
 
-    @OneToMany(cascade=CascadeType.ALL, mappedBy="group")
+    @OneToMany(cascade=CascadeType.ALL, mappedBy="group", fetch = FetchType.EAGER)
     private List<Team> teams = new ArrayList<>();
 
     protected Group() {

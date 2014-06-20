@@ -17,25 +17,21 @@
         <div th:replace="fragments/alert :: alert (type=${#strings.toLowerCase(message.type)}, message=#{${message.message}(${#authentication.name})})">&nbsp;</div>
     </th:block>
     <p>
-        <a href="#" class="btn btn-primary" th:href="@{/group/create}">Create new</a>
+        <a href="#" class="btn btn-primary" th:href="@{/team/create}">Create new</a>
     </p>
-    <p th:unless="${#lists.isEmpty(groups)}">
+    <p th:unless="${#lists.isEmpty(teams)}">
         <table class="table">
             <thead>
                 <tr>
                     <th>#</th>
                     <th>Name</th>
-                    <th>Teams</th>
+                    <th>Gruppe</th>
                 </tr>
             </thead>
-            <tr th:each="group : ${groups}">
-                <td th:text="${group.id}">1</td>
-                <td th:text="${group.name}">Text ...</td>
-                <td>
-                    <ul class="list-unstyled" th:each="team : ${group.teams}">
-                        <li th:text="${team.name}">Team 1</li>
-                    </ul>
-                </td>
+            <tr th:each="team : ${teams}">
+                <td th:text="${team.id}">1</td>
+                <td th:text="${team.name}">Team A ...</td>
+                <td th:text="${team.group.name}">Gruppe ...</td>
             </tr>
         </table>
     </p>

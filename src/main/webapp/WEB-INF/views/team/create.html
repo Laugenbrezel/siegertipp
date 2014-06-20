@@ -11,18 +11,28 @@
 <body>
 <div th:replace="fragments/header :: header">&nbsp;</div>
 <div class="container">
-    <form class="form-narrow form-horizontal" method="post" th:action="@{/group/create}" th:object="${group}">
+    <form role="form" method="post" th:action="@{/team/create}" th:object="${team}">
         <!-- /* Show general error message when form contains errors */ -->
-        <th:block th:if="${#fields.hasErrors('${group.*}')}">
+        <th:block th:if="${#fields.hasErrors('${team.*}')}">
             <div th:replace="fragments/alert :: alert (type='danger', message='Form contains errors. Please try again.')">Alert</div>
         </th:block>
         <fieldset>
-            <legend>Neue Gruppe</legend>
+            <legend>Neues Team</legend>
             <div class="form-group" th:classappend="${#fields.hasErrors('name')}? 'has-error'">
                 <label for="name" class="col-lg-2 control-label">Name</label>
                 <div class="col-lg-10">
                     <input type="text" class="form-control" id="name" placeholder="Name" th:field="*{name}" />
                     <span class="help-block" th:if="${#fields.hasErrors('name')}" th:errors="*{name}">Name falsch</span>
+                </div>
+            </div>
+            <div class="form-group" th:classappend="${#fields.hasErrors('group')}? 'has-error'">
+                <label for="group" class="col-lg-2 control-label">Gruppe</label>
+                <div class="col-lg-10">
+                    <select class="form-control" id="group" th:field="*{group}">
+                        <option th:each="group : ${groups}"
+                                th:value="${group.id}"
+                                th:text="${group.name}">Gruppe</option>
+                    </select>
                 </div>
             </div>
 

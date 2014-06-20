@@ -14,28 +14,29 @@
     <!-- /* Handle the flash message */-->
     <th:block th:if="${message != null}">
         <!-- /* The message code is returned from the @Controller */ -->
-        <div th:replace="fragments/alert :: alert (type=${#strings.toLowerCase(message.type)}, message=#{${message.message}(${#authentication.name})})">&nbsp;</div>
+        <div th:replace="fragments/alert :: alert (type=${#strings.toLowerCase(message.type)}, message=#{${message.message}(${message.args[0]})})">&nbsp;</div>
     </th:block>
     <p>
-        <a href="#" class="btn btn-primary" th:href="@{/group/create}">Create new</a>
+        <a href="#" class="btn btn-primary" th:href="@{/player/create}">Create new</a>
     </p>
-    <p th:unless="${#lists.isEmpty(groups)}">
+    <p th:unless="${#lists.isEmpty(players)}">
         <table class="table">
             <thead>
                 <tr>
                     <th>#</th>
                     <th>Name</th>
-                    <th>Teams</th>
+                    <th>Geschlecht</th>
+                    <th>Erstellt von</th>
+                    <th>Bild</th>
                 </tr>
             </thead>
-            <tr th:each="group : ${groups}">
-                <td th:text="${group.id}">1</td>
-                <td th:text="${group.name}">Text ...</td>
-                <td>
-                    <ul class="list-unstyled" th:each="team : ${group.teams}">
-                        <li th:text="${team.name}">Team 1</li>
-                    </ul>
-                </td>
+            <tr th:each="player : ${players}">
+                <td th:text="${player.id}">1</td>
+                <td th:text="${player.name}">Spieler A ...</td>
+                <td th:text="#{'player.gender.'+${player.gender}}">Dingsbums</td>
+                <td th:text="${player.createdBy.email}">User B ...</td>
+                <td><img class="img-responsive" th:src="@{/player/} + ${player.id} +'/picture'" /></td>
+                <td><a href="#" class="btn btn-default" th:href="@{/player/} + ${player.id}">Show</a></td>
             </tr>
         </table>
     </p>
