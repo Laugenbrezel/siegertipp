@@ -1,6 +1,7 @@
 package de.bigzee.siegertipp.model;
 
 import de.bigzee.siegertipp.account.Account;
+import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -21,7 +22,7 @@ public class Player implements Serializable {
     @GeneratedValue
     private Long id;
 
-    @NotNull
+    @NotEmpty
     @Column(unique = true)
     private String name;
 

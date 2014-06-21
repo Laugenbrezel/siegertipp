@@ -39,8 +39,12 @@ class PlayerController {
     @Autowired
     private PlayerRepository playerRepository;
 
-    @Autowired
     private UserService userService;
+
+    @Autowired
+    public PlayerController( UserService userService) {
+        this.userService = userService;
+    }
 
     @RequestMapping(value="/{id}", method=RequestMethod.GET)
     public String show(@PathVariable long id, Model model) {
