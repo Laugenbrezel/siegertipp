@@ -67,34 +67,14 @@ class TournamentController {
     }
 
     @RequestMapping(value = "/{id}/group/add", method = RequestMethod.POST)
-    public String addGroup(@Valid @ModelAttribute Group group, Errors errors, RedirectAttributes ra) {
+    public String addGroup(@PathVariable Long id, @Valid @ModelAttribute Group group, Errors errors, RedirectAttributes ra) {
         if (errors.hasErrors()) {
             return CREATE_GROUP;
         }
-        groupRepository.save(group);
+        //FIXME make setting the id stop
+        group.setId(null);
+        tournamentRepository.addGroup(id, group);
         MessageHelper.addSuccessAttribute(ra, "group.create.success", group.getName());
         return "redirect:/" + HOME;
-    }
-
-    @InitBinder
-    protected void initBinderGroup(HttpServletRequest request, ServletRequestDataBinder binder) throws Exception {
-        binder.registerCustomEditor(Group.class, "group", new PropertyEditorSupport() {
-            @Override
-            public void setAsText(String text) {
-                Group group = groupRepository.findById(Long.parseLong(text));
-                setValue(group);
-            }
-        });
-    }
-
-    @InitBinder
-    protected void initBinderTournament(HttpServletRequest request, ServletRequestDataBinder binder) throws Exception {
-        binder.registerCustomEditor(Tournament.class, "tournament", new PropertyEditorSupport() {
-            @Override
-            public void setAsText(String text) {
-                Tournament tournament = tournamentRepository.findById(Long.parseLong(text));
-                setValue(tournament);
-            }
-        });
     }
 }

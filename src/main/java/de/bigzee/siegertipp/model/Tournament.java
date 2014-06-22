@@ -66,6 +66,11 @@ public class Tournament implements Serializable {
         return startDate;
     }
 
+    public void addGroup(Group group) {
+        group.setTournament(this);
+        getGroups().add(group);
+    }
+
     public void setStartDate(Date startDate) {
         this.startDate = startDate;
     }
