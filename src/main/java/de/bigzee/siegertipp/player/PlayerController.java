@@ -14,14 +14,18 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.Assert;
+import org.springframework.util.StreamUtils;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.ServletRequestDataBinder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.Part;
 import javax.validation.Valid;
 import java.beans.PropertyEditorSupport;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.security.Principal;
 import java.util.Arrays;
@@ -75,6 +79,23 @@ class PlayerController {
             return SHOW;
         }
         playerRepository.update(player);
+        MessageHelper.addSuccessAttribute(ra, "player.update.success", player.getName());
+        return "redirect:/" + HOME;
+    }
+
+    @RequestMapping(value = "/update/{id}/picture", method = RequestMethod.POST)
+    public String updatePicture(@RequestPart("playerPicture") Part playerPicture, @PathVariable Long id, Errors errors, RedirectAttributes ra) throws IOException {
+        if (errors.hasErrors()) {
+            return SHOW;
+        }
+        Player player = playerRepository.findById(id);
+        if (playerPicture.getSize() > 0) {
+            player.setPicture(StreamUtils.copyToByteArray(playerPicture.getInputStream()));
+        } else {
+            player.setPicture(null);
+        }
+        playerRepository.update(player);
+
         MessageHelper.addSuccessAttribute(ra, "player.update.success", player.getName());
         return "redirect:/" + HOME;
     }

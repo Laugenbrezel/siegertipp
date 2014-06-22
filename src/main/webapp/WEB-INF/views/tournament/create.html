@@ -11,13 +11,13 @@
 <body>
 <div th:replace="fragments/header :: header">&nbsp;</div>
 <div class="container">
-    <form class="form-narrow form-horizontal" method="post" th:action="@{/group/create}" th:object="${groupForm}">
+    <form class="form-narrow form-horizontal" method="post" th:action="@{/tournament/create}" th:object="${tournament}">
         <!-- /* Show general error message when form contains errors */ -->
-        <th:block th:if="${#fields.hasErrors('${groupForm.*}')}">
+        <th:block th:if="${#fields.hasErrors('${tournament.*}')}">
             <div th:replace="fragments/alert :: alert (type='danger', message='Form contains errors. Please try again.')">Alert</div>
         </th:block>
         <fieldset>
-            <legend>Neues Team</legend>
+            <legend>Neues Tournament</legend>
             <div class="form-group" th:classappend="${#fields.hasErrors('name')}? 'has-error'">
                 <label for="name" class="col-lg-2 control-label">Name</label>
                 <div class="col-lg-10">
@@ -25,12 +25,7 @@
                     <span class="help-block" th:if="${#fields.hasErrors('name')}" th:errors="*{name}">Name falsch</span>
                 </div>
             </div>
-            <div class="form-group">
-                <label for="tournament" class="col-lg-2 control-label">Tournament</label>
-                <div class="col-lg-10">
-                    <input type="text" class="form-control" id="tournament" disabled th:field="*{tournament}" />
-                </div>
-            </div>
+
             <div class="form-group">
                 <div class="col-lg-offset-2 col-lg-10">
                     <button type="submit" class="btn btn-default">Create</button>

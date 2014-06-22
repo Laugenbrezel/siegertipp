@@ -11,7 +11,7 @@
 <body>
 <div th:replace="fragments/header :: header">&nbsp;</div>
 <div class="container">
-    <form class="form-narrow form-horizontal" method="post" th:action="@{/group/create}" th:object="${group}">
+    <form class="form-narrow form-horizontal" method="post" th:action="@{/tournament/} + ${id} + '/group/add'" th:object="${group}">
         <!-- /* Show general error message when form contains errors */ -->
         <th:block th:if="${#fields.hasErrors('${group.*}')}">
             <div th:replace="fragments/alert :: alert (type='danger', message='Form contains errors. Please try again.')">Alert</div>
@@ -23,6 +23,12 @@
                 <div class="col-lg-10">
                     <input type="text" class="form-control" id="name" placeholder="Name" th:field="*{name}" />
                     <span class="help-block" th:if="${#fields.hasErrors('name')}" th:errors="*{name}">Name falsch</span>
+                </div>
+            </div>
+            <div class="form-group" th:classappend="${#fields.hasErrors('tournament')}? 'has-error'">
+                <label for="tournament" class="col-lg-2 control-label">Tournament</label>
+                <div class="col-lg-10">
+                    <input type="text" class="form-control" id="tournament" th:field="*{tournament}" disabled/>
                 </div>
             </div>
 

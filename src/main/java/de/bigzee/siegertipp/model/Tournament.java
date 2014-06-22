@@ -1,9 +1,10 @@
 package de.bigzee.siegertipp.model;
 
-import org.codehaus.jackson.annotate.JsonIgnore;
-
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -11,9 +12,8 @@ import java.util.List;
  */
 @SuppressWarnings("serial")
 @Entity
-@Table(name = "team")
-public class Team  implements java.io.Serializable {
-
+@Table(name = "tournament")
+public class Tournament implements Serializable {
     @Id
     @GeneratedValue
     private Long id;
@@ -22,13 +22,19 @@ public class Team  implements java.io.Serializable {
     @Column(unique = true)
     private String name;
 
-    @ManyToMany(mappedBy="teams")
-    private List<Group> groups;
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date startDate;
 
-    protected Team() {
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date endDate;
+
+    @OneToMany(cascade=CascadeType.ALL, mappedBy="tournament")
+    private List<Group> groups = new ArrayList<>();
+
+    protected Tournament() {
     }
 
-    public Team(String name) {
+    public Tournament(String name) {
         this.name = name;
     }
 
@@ -56,14 +62,30 @@ public class Team  implements java.io.Serializable {
         this.groups = groups;
     }
 
+    public Date getStartDate() {
+        return startDate;
+    }
+
+    public void setStartDate(Date startDate) {
+        this.startDate = startDate;
+    }
+
+    public Date getEndDate() {
+        return endDate;
+    }
+
+    public void setEndDate(Date endDate) {
+        this.endDate = endDate;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof Team)) return false;
+        if (!(o instanceof Tournament)) return false;
 
-        Team team = (Team) o;
+        Tournament group = (Tournament) o;
 
-        if (!name.equals(team.name)) return false;
+        if (!name.equals(group.name)) return false;
 
         return true;
     }

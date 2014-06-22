@@ -31,7 +31,7 @@ class SecurityConfig {
 		return new StandardPasswordEncoder();
 	}
 
-  @Profile("test")
+  //@Profile("test")
   @Bean(name = "csrfMatcher")
   public RequestMatcher testCsrfMatcher() {
     return new RequestMatcher() {
@@ -43,27 +43,18 @@ class SecurityConfig {
     };
   }
 
+  /*
   @Profile("!test")
   @Bean(name = "csrfMatcher")
   public RequestMatcher csrfMatcher() {
-    /**
-     * Copy of default request matcher from
-     * CsrfFilter$DefaultRequiresCsrfMatcher
-     */
     return new RequestMatcher() {
       private Pattern allowedMethods = Pattern
         .compile("^(GET|HEAD|TRACE|OPTIONS)$");
 
-      /*
-       * (non-Javadoc)
-       *
-       * @see
-       * org.springframework.security.web.util.matcher.RequestMatcher#
-       * matches(javax.servlet.http.HttpServletRequest)
-       */
       public boolean matches(HttpServletRequest request) {
         return !allowedMethods.matcher(request.getMethod()).matches();
       }
     };
   }
+  */
 }

@@ -11,24 +11,32 @@ import java.util.List;
  */
 @SuppressWarnings("serial")
 @Entity
-@Table(name = "match_group")
+@Table(name = "match_group",  uniqueConstraints={
+        @UniqueConstraint(columnNames={"name", "tournament_id"})
+})
 public class Group implements Serializable {
     @Id
     @GeneratedValue
     private Long id;
 
     @NotNull
-    @Column(unique = true)
+    @Column(name = "name")
     private String name;
 
-    @OneToMany(cascade=CascadeType.ALL, mappedBy="group", fetch = FetchType.EAGER)
+    @ManyToOne
+    @JoinColumn(name="tournament_id", nullable=false)
+    private Tournament tournament;
+
+    @ManyToMany
+    @JoinTable(name="groups_teams")
     private List<Team> teams = new ArrayList<>();
 
     protected Group() {
     }
 
-    public Group(String name) {
+    public Group(String name, Tournament tournament) {
         this.name = name;
+        this.tournament = tournament;
     }
 
     public Long getId() {
@@ -55,20 +63,11 @@ public class Group implements Serializable {
         this.teams = teams;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof Group)) return false;
-
-        Group group = (Group) o;
-
-        if (!name.equals(group.name)) return false;
-
-        return true;
+    public Tournament getTournament() {
+        return tournament;
     }
 
-    @Override
-    public int hashCode() {
-        return name.hashCode();
+    public void setTournament(Tournament tournament) {
+        this.tournament = tournament;
     }
 }
