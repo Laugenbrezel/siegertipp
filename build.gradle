@@ -1,0 +1,54 @@
+buildscript {
+    repositories {
+        maven { url "http://repo.spring.io/libs-release" }
+        mavenLocal()
+        mavenCentral()
+    }
+    dependencies {
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:1.1.1.RELEASE")
+    }
+}
+
+apply plugin: 'war'
+apply plugin: 'idea'
+apply plugin: 'spring-boot'
+
+war {
+    baseName = 'siegertipp'
+    version =  '0.2.0'
+}
+
+repositories {
+    mavenLocal()
+    mavenCentral()
+}
+
+configurations {
+    providedRuntime
+}
+
+dependencies {
+    compile("org.springframework.boot:spring-boot-starter-thymeleaf")
+    compile("org.springframework.boot:spring-boot-starter-batch")
+    compile("org.springframework.boot:spring-boot-starter-data-mongodb")
+    compile("org.springframework.boot:spring-boot-starter-data-rest")
+	compile("org.springframework.boot:spring-boot-starter-data-jpa")
+	compile("org.springframework.boot:spring-boot-starter-security")
+	compile("org.springframework.boot:spring-boot-starter-test")
+	compile("com.fasterxml.jackson.core:jackson-annotations")
+
+    compile("org.thymeleaf:thymeleaf-spring4")
+    compile("org.thymeleaf.extras:thymeleaf-extras-springsecurity3")
+    compile("nz.net.ultraq.thymeleaf:thymeleaf-layout-dialect")
+
+    compile("javax.inject:javax.inject:1")
+
+    testCompile("junit:junit")
+    testCompile 'org.assertj:assertj-core:1.5.0'
+    testCompile 'org.assertj:assertj-joda-time:1.1.0'
+    testCompile 'org.assertj:assertj-guava:1.1.0'
+}
+
+task wrapper(type: Wrapper) {
+    gradleVersion = '1.11'
+}

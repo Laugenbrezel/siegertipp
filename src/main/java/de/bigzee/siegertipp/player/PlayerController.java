@@ -1,33 +1,23 @@
 package de.bigzee.siegertipp.player;
 
-import com.google.common.io.ByteStreams;
-import de.bigzee.siegertipp.account.Account;
 import de.bigzee.siegertipp.account.UserService;
 import de.bigzee.siegertipp.model.Gender;
-import de.bigzee.siegertipp.model.Group;
 import de.bigzee.siegertipp.model.Player;
 import de.bigzee.siegertipp.support.web.MessageHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.annotation.Secured;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.Assert;
 import org.springframework.util.StreamUtils;
 import org.springframework.validation.Errors;
-import org.springframework.web.bind.ServletRequestDataBinder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.Part;
 import javax.validation.Valid;
-import java.beans.PropertyEditorSupport;
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.security.Principal;
 import java.util.Arrays;
 import java.util.List;
 
@@ -46,13 +36,13 @@ class PlayerController {
     private UserService userService;
 
     @Autowired
-    public PlayerController( UserService userService) {
+    public PlayerController(UserService userService) {
         this.userService = userService;
     }
 
-    @RequestMapping(value="/{id}", method=RequestMethod.GET)
-    public String show(@PathVariable long id, Model model) {
-        model.addAttribute(playerRepository.findById(id));
+    @RequestMapping(value = "/{id}", method = RequestMethod.GET)
+    public String show(@PathVariable String id, Model model) {
+        model.addAttribute(playerRepository.findOne(id));
         return SHOW;
     }
 
@@ -67,7 +57,7 @@ class PlayerController {
         if (errors.hasErrors()) {
             return CREATE;
         }
-        player.setCreatedBy(userService.current());
+        player.setCreatedBy(userService.current().getEmail());
         playerRepository.save(player);
         MessageHelper.addSuccessAttribute(ra, "player.create.success", player.getName());
         return "redirect:/" + HOME;
@@ -78,23 +68,23 @@ class PlayerController {
         if (errors.hasErrors()) {
             return SHOW;
         }
-        playerRepository.update(player);
+        playerRepository.save(player);
         MessageHelper.addSuccessAttribute(ra, "player.update.success", player.getName());
         return "redirect:/" + HOME;
     }
 
     @RequestMapping(value = "/update/{id}/picture", method = RequestMethod.POST)
-    public String updatePicture(@RequestPart("playerPicture") Part playerPicture, @PathVariable Long id, Errors errors, RedirectAttributes ra) throws IOException {
+    public String updatePicture(@RequestPart("playerPicture") Part playerPicture, @PathVariable String id, Errors errors, RedirectAttributes ra) throws IOException {
         if (errors.hasErrors()) {
             return SHOW;
         }
-        Player player = playerRepository.findById(id);
+        Player player = playerRepository.findOne(id);
         if (playerPicture.getSize() > 0) {
             player.setPicture(StreamUtils.copyToByteArray(playerPicture.getInputStream()));
         } else {
             player.setPicture(null);
         }
-        playerRepository.update(player);
+        playerRepository.save(player);
 
         MessageHelper.addSuccessAttribute(ra, "player.update.success", player.getName());
         return "redirect:/" + HOME;
@@ -108,9 +98,9 @@ class PlayerController {
     @RequestMapping(value = "/{id}/picture", method = RequestMethod.GET)
     @ResponseStatus(value = HttpStatus.OK)
     @ResponseBody
-    public byte[] picture(@PathVariable Long id) {
+    public byte[] picture(@PathVariable String id) {
         Assert.notNull(id);
-        Player player = playerRepository.findById(id);
+        Player player = playerRepository.findOne(id);
 
         if (player.getPicture() != null) {
             return player.getPicture();
@@ -119,7 +109,7 @@ class PlayerController {
         byte[] emptyPicture =
                 new byte[0];
         try {
-            emptyPicture = ByteStreams.toByteArray(this.getClass().getClassLoader().getResourceAsStream("empty_avatar.png"));
+            emptyPicture = StreamUtils.copyToByteArray(this.getClass().getClassLoader().getResourceAsStream("empty_avatar.png"));
         } catch (IOException e) {
             e.printStackTrace();
         }

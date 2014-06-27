@@ -1,54 +1,41 @@
 package de.bigzee.siegertipp.model;
 
-import de.bigzee.siegertipp.account.Account;
-import org.hibernate.validator.constraints.NotEmpty;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
 
-import javax.persistence.*;
-import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 
 /**
  * Created by lzimmerm on 19.06.2014.
  */
 @SuppressWarnings("serial")
-@Entity
-@Table(name = "player")
-@NamedQuery(name = Player.FIND_BY_NAME, query = "select p from Player p where p.name = :name")
+@Document(collection = "players")
 public class Player implements Serializable {
 
-    public static final String FIND_BY_NAME = "Player.findByName";
-
     @Id
-    @GeneratedValue
-    private Long id;
+    private String id;
 
-    @NotEmpty
-    @Column(unique = true)
     private String name;
 
-    @NotNull @Enumerated
     private Gender gender;
 
-    @Lob
     private byte[] picture;
 
-    @ManyToOne
-    @JoinColumn(name="account_id", nullable=false, updatable = false)
-    private Account createdBy;
+    private String createdBy;
 
     protected Player() {
     }
 
-    public Player(String name, Account createdBy) {
+    public Player(String name, String createdBy) {
         this.name = name;
         this.createdBy = createdBy;
     }
 
-    public Long getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(String id) {
         this.id = id;
     }
 
@@ -76,11 +63,11 @@ public class Player implements Serializable {
         this.picture = picture;
     }
 
-    public Account getCreatedBy() {
+    public String getCreatedBy() {
         return createdBy;
     }
 
-    public void setCreatedBy(Account createdBy) {
+    public void setCreatedBy(String createdBy) {
         this.createdBy = createdBy;
     }
 

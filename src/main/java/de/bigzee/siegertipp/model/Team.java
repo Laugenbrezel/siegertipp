@@ -1,7 +1,5 @@
 package de.bigzee.siegertipp.model;
 
-import org.codehaus.jackson.annotate.JsonIgnore;
-
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.util.List;
