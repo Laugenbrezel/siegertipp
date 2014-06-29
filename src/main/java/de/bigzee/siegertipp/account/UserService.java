@@ -5,7 +5,9 @@ import java.util.Collections;
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 
+import com.mongodb.MongoException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.*;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -23,8 +25,12 @@ public class UserService implements UserDetailsService {
 	
 	@PostConstruct	
 	protected void initialize() {
-		accountRepository.save(new Account("user", passwordEncoder.encode("demo"), "ROLE_USER"));
-		accountRepository.save(new Account("admin", passwordEncoder.encode("admin"), "ROLE_ADMIN"));
+        try {
+            accountRepository.save(new Account("user", passwordEncoder.encode("demo"), "ROLE_USER"));
+            accountRepository.save(new Account("admin", passwordEncoder.encode("admin"), "ROLE_ADMIN"));
+        } catch (DuplicateKeyException e) {
+            //ok, we have default users already
+        }
 	}
 	
 	@Override

@@ -1,11 +1,13 @@
 package de.bigzee.siegertipp.model;
 
 import de.bigzee.siegertipp.account.Account;
+import org.hibernate.validator.constraints.NotEmpty;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 
 /**
@@ -18,9 +20,11 @@ public class Player implements Serializable {
     @Id
     private String id;
 
+    @NotEmpty
     @Indexed(unique=true)
     private String name;
 
+    @NotNull
     private Gender gender;
 
     private byte[] picture;

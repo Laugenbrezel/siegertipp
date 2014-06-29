@@ -11,7 +11,7 @@
 <body>
 <div th:replace="fragments/header :: header">&nbsp;</div>
 <div class="container">
-    <form class="form-narrow form-horizontal" method="post" th:action="@{/player/update}" th:object="${player}" enctype="multipart/form-data">
+    <form class="form-narrow form-horizontal" method="post" th:action="@{/player/update}" th:object="${player}">
         <!-- /* Show general error message when form contains errors */ -->
         <th:block th:if="${#fields.hasErrors('${player.*}')}">
             <div th:replace="fragments/alert :: alert (type='danger', message='Form contains errors. Please try again.')">Alert</div>
@@ -19,6 +19,7 @@
         <fieldset>
             <legend>Spieler</legend>
             <input type="hidden" id="id" th:field="*{id}"/>
+            <input type="hidden" id="createdBy" th:field="*{createdBy}"/>
             <div class="form-group" th:classappend="${#fields.hasErrors('name')}? 'has-error'">
                 <label for="name" class="col-lg-2 control-label">Name</label>
                 <div class="col-lg-10">

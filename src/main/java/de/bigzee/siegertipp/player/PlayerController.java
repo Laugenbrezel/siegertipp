@@ -1,7 +1,9 @@
 package de.bigzee.siegertipp.player;
 
+import de.bigzee.siegertipp.account.Account;
 import de.bigzee.siegertipp.account.UserService;
 import de.bigzee.siegertipp.model.Gender;
+import de.bigzee.siegertipp.model.Group;
 import de.bigzee.siegertipp.model.Player;
 import de.bigzee.siegertipp.support.web.MessageHelper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,11 +14,14 @@ import org.springframework.ui.Model;
 import org.springframework.util.Assert;
 import org.springframework.util.StreamUtils;
 import org.springframework.validation.Errors;
+import org.springframework.web.bind.ServletRequestDataBinder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.Part;
 import javax.validation.Valid;
+import java.beans.PropertyEditorSupport;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
