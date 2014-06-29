@@ -3,6 +3,7 @@ package de.bigzee.siegertipp.account;
 import java.util.Collections;
 
 import javax.annotation.PostConstruct;
+import javax.inject.Inject;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -10,16 +11,20 @@ import org.springframework.security.core.*;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.*;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 public class UserService implements UserDetailsService {
-	
+
+    @Inject
+    private PasswordEncoder passwordEncoder;
+
 	@Autowired
 	private AccountRepository accountRepository;
 	
 	@PostConstruct	
 	protected void initialize() {
-		accountRepository.save(new Account("user", "demo", "ROLE_USER"));
-		accountRepository.save(new Account("admin", "admin", "ROLE_ADMIN"));
+		accountRepository.save(new Account("user", passwordEncoder.encode("demo"), "ROLE_USER"));
+		accountRepository.save(new Account("admin", passwordEncoder.encode("admin"), "ROLE_ADMIN"));
 	}
 	
 	@Override
@@ -55,4 +60,7 @@ public class UserService implements UserDetailsService {
 		return new SimpleGrantedAuthority(account.getRole());
 	}
 
+    public Account save(Account account) {
+        return accountRepository.save(account);
+    }
 }

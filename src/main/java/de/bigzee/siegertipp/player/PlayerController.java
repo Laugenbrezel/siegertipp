@@ -57,7 +57,7 @@ class PlayerController {
         if (errors.hasErrors()) {
             return CREATE;
         }
-        player.setCreatedBy(userService.current().getEmail());
+        player.setCreatedBy(userService.current());
         playerRepository.save(player);
         MessageHelper.addSuccessAttribute(ra, "player.create.success", player.getName());
         return "redirect:/" + HOME;

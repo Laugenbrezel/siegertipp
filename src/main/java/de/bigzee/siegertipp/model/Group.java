@@ -1,6 +1,9 @@
 package de.bigzee.siegertipp.model;
 
-import javax.persistence.*;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.DBRef;
+import org.springframework.data.mongodb.core.mapping.Document;
+
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -10,25 +13,22 @@ import java.util.List;
  * Created by lzimmerm on 19.06.2014.
  */
 @SuppressWarnings("serial")
-@Entity
-@Table(name = "match_group",  uniqueConstraints={
-        @UniqueConstraint(columnNames={"name", "tournament_id"})
-})
+@Document(collection = "groups")
+//@Entity
+//@Table(name = "match_group",  uniqueConstraints={
+//        @UniqueConstraint(columnNames={"name", "tournament_id"})
+//})
 public class Group implements Serializable {
     @Id
-    @GeneratedValue
-    private Long id;
+    private String id;
 
     @NotNull
-    @Column(name = "name")
     private String name;
 
-    @ManyToOne
-    @JoinColumn(name="tournament_id", nullable=false)
+    @DBRef
     private Tournament tournament;
 
-    @ManyToMany
-    @JoinTable(name="groups_teams")
+    @DBRef
     private List<Team> teams = new ArrayList<>();
 
     protected Group() {
@@ -39,11 +39,11 @@ public class Group implements Serializable {
         this.tournament = tournament;
     }
 
-    public Long getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(String id) {
         this.id = id;
     }
 

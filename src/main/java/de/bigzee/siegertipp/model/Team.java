@@ -1,6 +1,9 @@
 package de.bigzee.siegertipp.model;
 
-import javax.persistence.*;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.DBRef;
+import org.springframework.data.mongodb.core.mapping.Document;
+
 import javax.validation.constraints.NotNull;
 import java.util.List;
 
@@ -8,19 +11,16 @@ import java.util.List;
  * Created by lzimmerm on 19.06.2014.
  */
 @SuppressWarnings("serial")
-@Entity
-@Table(name = "team")
-public class Team  implements java.io.Serializable {
+@Document(collection = "teams")
+public class Team implements java.io.Serializable {
 
     @Id
-    @GeneratedValue
-    private Long id;
+    private String id;
 
     @NotNull
-    @Column(unique = true)
     private String name;
 
-    @ManyToMany(mappedBy="teams")
+    @DBRef
     private List<Group> groups;
 
     protected Team() {
@@ -30,11 +30,11 @@ public class Team  implements java.io.Serializable {
         this.name = name;
     }
 
-    public Long getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(String id) {
         this.id = id;
     }
 

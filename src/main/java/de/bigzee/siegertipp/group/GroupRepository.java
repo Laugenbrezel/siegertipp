@@ -1,37 +1,10 @@
 package de.bigzee.siegertipp.group;
 
 import de.bigzee.siegertipp.model.Group;
-import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
+import org.springframework.data.mongodb.repository.MongoRepository;
+import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-import java.util.List;
+@RepositoryRestResource(collectionResourceRel = "groups", path = "groups")
+public interface GroupRepository extends MongoRepository<Group, String> {
 
-@Repository
-@Transactional(readOnly = true)
-public class GroupRepository {
-
-    @PersistenceContext
-    private EntityManager entityManager;
-
-    @Transactional
-    public Group save(Group group) {
-        entityManager.persist(group);
-        return group;
-    }
-
-    @Transactional
-    public Group update(Group group) {
-        entityManager.merge(group);
-        return group;
-    }
-
-    public List<Group> findAll() {
-        return entityManager.createQuery("select p from Group p left join fetch p.teams order by p.name", Group.class).getResultList();
-    }
-
-    public Group findById(Long id) {
-        return entityManager.find(Group.class, id);
-    }
 }

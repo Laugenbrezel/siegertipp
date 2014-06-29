@@ -40,7 +40,8 @@ class TeamController {
         model.addAttribute(new Team(""));
         return CREATE;
     }
-//TODO implement service layer
+
+    //TODO implement service layer
     @RequestMapping(value = "/create", method = RequestMethod.POST)
     public String create(@Valid @ModelAttribute Team team, Errors errors, RedirectAttributes ra) {
         if (errors.hasErrors()) {
@@ -71,7 +72,7 @@ class TeamController {
         binder.registerCustomEditor(Group.class, "group", new PropertyEditorSupport() {
             @Override
             public void setAsText(String text) {
-                Group group = groupRepository.findById(Long.parseLong(text));
+                Group group = groupRepository.findOne(text);
                 setValue(group);
             }
         });

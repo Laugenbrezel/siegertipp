@@ -1,6 +1,9 @@
 package de.bigzee.siegertipp.model;
 
-import javax.persistence.*;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.DBRef;
+import org.springframework.data.mongodb.core.mapping.Document;
+
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -11,24 +14,20 @@ import java.util.List;
  * Created by lzimmerm on 19.06.2014.
  */
 @SuppressWarnings("serial")
-@Entity
-@Table(name = "tournament")
+@Document(collection = "tournaments")
 public class Tournament implements Serializable {
+
     @Id
-    @GeneratedValue
-    private Long id;
+    private String id;
 
     @NotNull
-    @Column(unique = true)
     private String name;
 
-    @Temporal(TemporalType.TIMESTAMP)
     private Date startDate;
 
-    @Temporal(TemporalType.TIMESTAMP)
     private Date endDate;
 
-    @OneToMany(cascade=CascadeType.ALL, mappedBy="tournament")
+    @DBRef
     private List<Group> groups = new ArrayList<>();
 
     protected Tournament() {
@@ -38,11 +37,11 @@ public class Tournament implements Serializable {
         this.name = name;
     }
 
-    public Long getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(String id) {
         this.id = id;
     }
 
@@ -66,13 +65,13 @@ public class Tournament implements Serializable {
         return startDate;
     }
 
+    public void setStartDate(Date startDate) {
+        this.startDate = startDate;
+    }
+
     public void addGroup(Group group) {
         group.setTournament(this);
         getGroups().add(group);
-    }
-
-    public void setStartDate(Date startDate) {
-        this.startDate = startDate;
     }
 
     public Date getEndDate() {

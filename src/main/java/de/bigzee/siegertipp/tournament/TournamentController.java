@@ -1,6 +1,5 @@
 package de.bigzee.siegertipp.tournament;
 
-import de.bigzee.siegertipp.group.GroupRepository;
 import de.bigzee.siegertipp.model.Group;
 import de.bigzee.siegertipp.model.Tournament;
 import de.bigzee.siegertipp.support.web.MessageHelper;
@@ -9,13 +8,13 @@ import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
-import org.springframework.web.bind.ServletRequestDataBinder;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
-import java.beans.PropertyEditorSupport;
 import java.util.List;
 
 @Controller
@@ -29,9 +28,6 @@ class TournamentController {
 
     @Autowired
     private TournamentRepository tournamentRepository;
-
-    @Autowired
-    private GroupRepository groupRepository;
 
     @RequestMapping(value = "/create", method = RequestMethod.GET)
     public String create(Model model) {
@@ -60,20 +56,22 @@ class TournamentController {
     }
 
     @RequestMapping(value = "/{id}/group/add", method = RequestMethod.GET)
-    public String newGroup(@PathVariable Long id, Model model) {
-        Tournament tournament = tournamentRepository.findById(id);
+    public String newGroup(@PathVariable String id, Model model) {
+        Tournament tournament = tournamentRepository.findOne(id);
         model.addAttribute(new Group("", tournament));
         return CREATE_GROUP;
     }
 
     @RequestMapping(value = "/{id}/group/add", method = RequestMethod.POST)
-    public String addGroup(@PathVariable Long id, @Valid @ModelAttribute Group group, Errors errors, RedirectAttributes ra) {
+    public String addGroup(@PathVariable String id, @Valid @ModelAttribute Group group, Errors errors, RedirectAttributes ra) {
         if (errors.hasErrors()) {
             return CREATE_GROUP;
         }
         //FIXME make setting the id stop
         group.setId(null);
-        tournamentRepository.addGroup(id, group);
+        Tournament tournament = tournamentRepository.findOne(id);
+        tournament.addGroup(group);
+        tournamentRepository.save(tournament);
         MessageHelper.addSuccessAttribute(ra, "group.create.success", group.getName());
         return "redirect:/" + HOME;
     }

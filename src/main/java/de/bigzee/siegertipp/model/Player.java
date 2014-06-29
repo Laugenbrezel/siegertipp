@@ -1,6 +1,9 @@
 package de.bigzee.siegertipp.model;
 
+import de.bigzee.siegertipp.account.Account;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.index.Indexed;
+import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.io.Serializable;
@@ -15,18 +18,20 @@ public class Player implements Serializable {
     @Id
     private String id;
 
+    @Indexed(unique=true)
     private String name;
 
     private Gender gender;
 
     private byte[] picture;
 
-    private String createdBy;
+    @DBRef
+    private Account createdBy;
 
     protected Player() {
     }
 
-    public Player(String name, String createdBy) {
+    public Player(String name, Account createdBy) {
         this.name = name;
         this.createdBy = createdBy;
     }
@@ -63,11 +68,11 @@ public class Player implements Serializable {
         this.picture = picture;
     }
 
-    public String getCreatedBy() {
+    public Account getCreatedBy() {
         return createdBy;
     }
 
-    public void setCreatedBy(String createdBy) {
+    public void setCreatedBy(Account createdBy) {
         this.createdBy = createdBy;
     }
 

@@ -1,22 +1,18 @@
 package de.bigzee.siegertipp.account;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-
-import javax.persistence.*;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.index.Indexed;
+import org.springframework.data.mongodb.core.mapping.Document;
 
 @SuppressWarnings("serial")
-@Entity
-@Table(name = "account")
-@NamedQuery(name = Account.FIND_BY_EMAIL, query = "select a from Account a where a.email = :email")
+@Document(collection = "accounts")
 public class Account implements java.io.Serializable {
 
-    public static final String FIND_BY_EMAIL = "Account.findByEmail";
-
     @Id
-    @GeneratedValue
-    private Long id;
+    private String id;
 
-    @Column(unique = true)
+    @Indexed(unique=true)
     private String email;
 
     @JsonIgnore
@@ -34,7 +30,7 @@ public class Account implements java.io.Serializable {
         this.role = role;
     }
 
-    public Long getId() {
+    public String getId() {
         return id;
     }
 
